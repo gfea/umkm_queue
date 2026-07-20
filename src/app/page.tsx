@@ -22,8 +22,9 @@ export default function Home() {
       // merchantId mockup untuk demo MVP
       const res = await createQueueTicket({ merchantId: "demo-merchant", customerName: name })
       setTicket(res)
-    } catch (err: any) {
-      setError(err.message || "Gagal mengambil antrean")
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Gagal mengambil antrean"
+      setError(message)
     } finally {
       setLoading(false)
     }

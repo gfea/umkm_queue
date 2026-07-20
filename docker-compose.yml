@@ -1,0 +1,23 @@
+services:
+  umkm-queue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: umkm-queue
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL:-}
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.scope=gfea
+    networks:
+      - gfea-network
+
+networks:
+  gfea-network:
+    external: true
