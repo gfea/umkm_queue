@@ -3,6 +3,9 @@ import { addClient, removeClient } from "@/lib/sse"
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
 
+// Optional: you can force response streaming
+export const preferredRegion = 'auto'
+
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const merchantId = searchParams.get("merchantId") || undefined

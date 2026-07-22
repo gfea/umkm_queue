@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useRef, useState, useCallback } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Bell, CheckCircle2, Clock3, LogOut, Printer, RotateCcw, Users, RefreshCw, ShoppingBag, Radio, Zap, Volume2, Keyboard } from "lucide-react"
+import { Bell, CheckCircle2, Clock3, LogOut, Printer, RotateCcw, Users, RefreshCw, ShoppingBag, Zap, Volume2, Keyboard } from "lucide-react"
 import { Badge } from "@/components/ui/Badge"
 import { Button } from "@/components/ui/Button"
 import { Card } from "@/components/ui/Card"
@@ -97,7 +97,7 @@ export default function MerchantDashboardPage() {
   }, [router, fetchLatest])
 
   // Same-origin SSE push sync; no polling loop.
-  const { connectionType } = useRealtimeSync(merchant?.id, fetchLatest)
+  useRealtimeSync(merchant?.id, fetchLatest)
 
   const merchantTickets = useMemo(
     () => tickets.filter((t) => t.merchantId === merchant?.id).sort((a, b) => a.number - b.number),
@@ -147,12 +147,6 @@ export default function MerchantDashboardPage() {
     return <main className="grid min-h-[100dvh] place-items-center bg-[#090b10] text-sm text-slate-400">Memuat dashboard toko...</main>
   }
 
-  const badgeText = connectionType === "sse"
-    ? "SSE Live"
-    : connectionType === "connecting"
-    ? "Connecting..."
-    : "Local Events"
-
   return (
     <main className="min-h-[100dvh] bg-[#090b10] bg-mesh-gradient p-3 sm:p-6 pb-24 lg:pb-8 text-slate-100">
       <div className="mx-auto max-w-7xl space-y-4 sm:space-y-6">
@@ -165,9 +159,6 @@ export default function MerchantDashboardPage() {
                 <h1 className="text-lg sm:text-2xl font-black text-white truncate max-w-[160px] sm:max-w-none">
                   {merchant.businessName}
                 </h1>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-[10px] font-bold text-emerald-300 border border-emerald-500/30">
-                  <Radio className="w-3 h-3 text-emerald-400 animate-pulse" /> {badgeText}
-                </span>
               </div>
               <p className="text-[11px] text-slate-400">
                 Kasir: {merchant.ownerName} {lastSyncTime && <span className="font-mono text-slate-500">• {lastSyncTime}</span>}
