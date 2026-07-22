@@ -24,3 +24,6 @@ yarn-error.log*
 # Vercel
 .vercel
 .env
+
+# Database
+sqlite_db.json
