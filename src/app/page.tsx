@@ -60,8 +60,8 @@ export default function Home() {
             },
             {
               icon: Zap,
-              title: "Real-Time WebSocket Sync",
-              desc: "Perubahan status antrean di dashboard kasir langsung ter-update di layar HP pembeli secara instant tanpa perlu refresh.",
+              title: "Informasi Selalu Terbarui",
+              desc: "Perubahan antrean langsung muncul di HP pembeli tanpa perlu memuat ulang halaman.",
             },
             {
               icon: Store,

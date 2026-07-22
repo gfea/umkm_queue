@@ -243,7 +243,7 @@ export default function QueuePage() {
               <div className="rounded-[1.75rem] sm:rounded-[2rem] border border-white/10 bg-slate-900/70 p-5 sm:p-6 backdrop-blur-2xl shadow-2xl space-y-5">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-mono text-emerald-400 uppercase tracking-widest flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5" /> Antrean Real-Time
+                    <Sparkles className="w-3.5 h-3.5" /> Kondisi Antrean
                   </span>
                   <span className="text-xs font-bold text-slate-400 flex items-center gap-1">
                     <Users className="w-3.5 h-3.5 text-emerald-400" /> {waitingCount} Menunggu
@@ -301,7 +301,7 @@ export default function QueuePage() {
 
         <footer className="text-center text-[11px] font-mono text-slate-500 pt-2 flex items-center justify-center gap-2">
           <Logo size="sm" showText={false} />
-          <span>q-lite.gfea.my.id · Real-Time Live Sync</span>
+          <span>q-lite.gfea.my.id · Informasi Selalu Terbarui</span>
         </footer>
       </div>
     </main>

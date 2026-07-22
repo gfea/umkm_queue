@@ -205,7 +205,7 @@ export default function MerchantDashboardPage() {
           <div className="flex items-center justify-between gap-4">
             <div>
               <span className="font-mono text-[10px] uppercase tracking-widest text-emerald-400 flex items-center gap-1">
-                <Zap className="w-3.5 h-3.5 text-amber-400" /> Panggil Otomatis (SSE Push · 0ms)
+                <Zap className="w-3.5 h-3.5 text-amber-400" /> Panggil Antrean Berikutnya
               </span>
               <p className="mt-0.5 text-sm text-slate-300">Tekan <kbd className="px-1.5 py-0.5 rounded bg-slate-800 text-emerald-400 font-mono text-xs">Space</kbd> untuk panggil antrean terdepan.</p>
             </div>

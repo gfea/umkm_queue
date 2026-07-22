@@ -48,7 +48,7 @@ export function ParallaxHero() {
             q-lite.gfea.my.id
           </span>
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-          <span className="text-slate-400 font-normal">Antrean Real-Time</span>
+          <span className="text-slate-400 font-normal">Pantau Antrean Langsung</span>
         </motion.div>
 
         {/* Headline */}
@@ -130,7 +130,7 @@ export function ParallaxHero() {
             </div>
             <span className="font-mono text-[11px] text-emerald-300">https://q-lite.gfea.my.id/q/kopi-pagi</span>
             <span className="text-emerald-400 font-semibold flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" /> Live Sync
+              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" /> Selalu Terbarui
             </span>
           </div>
 
