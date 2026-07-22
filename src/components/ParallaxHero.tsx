@@ -26,7 +26,7 @@ export function ParallaxHero() {
       className="relative min-h-[92vh] flex flex-col justify-center items-center px-4 pt-28 pb-16 overflow-hidden bg-mesh-gradient"
     >
       {/* Background Animated Parallax Light Orbs */}
-      <motion.div style={{ y: yBg }} className="pointer-events-none absolute inset-0 z-0">
+      <motion.div style={{ y: yBg }} className="pointer-events-none absolute inset-0 z-0 smooth-gpu">
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 h-[450px] w-[650px] rounded-full bg-gradient-to-tr from-emerald-500/20 via-teal-500/10 to-amber-500/15 blur-[120px]" />
         <div className="absolute top-10 left-10 h-72 w-72 rounded-full bg-emerald-500/10 blur-[90px] animate-float" />
         <div className="absolute bottom-20 right-10 h-80 w-80 rounded-full bg-amber-500/10 blur-[100px] animate-float-delayed" />

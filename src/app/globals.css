@@ -11,7 +11,6 @@
   }
 
   html {
-    scroll-behavior: smooth;
     color-scheme: dark;
   }
 
@@ -115,6 +114,7 @@
   will-change: transform, opacity;
   transform: translateZ(0);
   backface-visibility: hidden;
+  contain: paint layout style;
 }
 
 /* Fast Keyframe Animations */
@@ -154,4 +154,13 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(16, 185, 129, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
