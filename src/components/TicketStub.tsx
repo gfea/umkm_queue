@@ -34,7 +34,8 @@ export function TicketStub({
       } else if (status === "preparing") {
         playChime("success")
       }
-      setPrevStatus(status)
+      // Delay state update to avoid cascading render warning in React 18+ strict mode
+      setTimeout(() => setPrevStatus(status), 0)
     }
   }, [status, prevStatus])
 

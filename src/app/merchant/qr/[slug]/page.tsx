@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
-import { ArrowLeft, Printer, QrCode, Store, ScanLine, Smartphone, Bell, Sparkles, CheckCircle2 } from "lucide-react"
+import { ArrowLeft, Printer, QrCode, ScanLine, Smartphone, Bell, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/Button"
 import { InstantQrCode } from "@/components/InstantQrCode"
 import { Logo } from "@/components/Logo"

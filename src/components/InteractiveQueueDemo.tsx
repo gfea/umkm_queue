@@ -216,7 +216,7 @@ export function InteractiveQueueDemo() {
                 </div>
 
                 <div className="rounded-2xl bg-amber-500/10 p-4 border border-amber-500/20 text-xs text-amber-200">
-                  🔊 <strong>Efek Suara & Haptic:</strong> Saat memilih "Siap Diambil", HP pembeli akan berbunyi chime dan bergetar otomatis!
+                  🔊 <strong>Efek Suara & Haptic:</strong> Saat memilih &quot;Siap Diambil&quot;, HP pembeli akan berbunyi chime dan bergetar otomatis!
                 </div>
               </motion.div>
             )}

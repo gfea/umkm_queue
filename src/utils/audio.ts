@@ -1,5 +1,30 @@
 "use client"
 
+export type HapticType = "tap" | "success" | "alert"
+
+/** Trigger device vibration where supported. iOS Safari currently ignores Vibration API. */
+export function haptic(type: HapticType = "tap") {
+  if (typeof navigator === "undefined" || !("vibrate" in navigator)) return false
+  const pattern = type === "alert" ? [180, 90, 180, 90, 320] : type === "success" ? [70, 45, 140] : 35
+  return navigator.vibrate(pattern)
+}
+
+/** Request browser notification permission from a user gesture. */
+export async function enableNotifications() {
+  if (typeof window === "undefined" || !("Notification" in window)) return "unsupported" as const
+  if (Notification.permission === "granted") return "granted" as const
+  if (Notification.permission === "denied") return "denied" as const
+  return Notification.requestPermission()
+}
+
+/** Show status notification while page is open or backgrounded. */
+export function notifyQueue(title: string, body: string, tag: string) {
+  if (typeof window === "undefined" || !("Notification" in window) || Notification.permission !== "granted") return false
+  const notification = new Notification(title, { body, icon: "/logo.jpg", badge: "/logo.jpg", tag } as NotificationOptions)
+  notification.onclick = () => { window.focus(); notification.close() }
+  return true
+}
+
 /**
  * Plays a pleasant chime / notification tone using Web Audio API
  */
@@ -57,10 +82,8 @@ export function playChime(type: "success" | "ready" | "click" = "ready") {
       osc.stop(ctx.currentTime + idx * 0.12 + 0.4)
     })
 
-    // Trigger haptic vibration if supported
-    if (typeof navigator !== "undefined" && "vibrate" in navigator) {
-      navigator.vibrate([150, 80, 150, 80, 250])
-    }
+    // Haptic feedback
+    haptic(type === "ready" ? "alert" : "success")
   } catch {
     // Ignore audio autoplay restrictions or un-supported contexts gracefully
   }

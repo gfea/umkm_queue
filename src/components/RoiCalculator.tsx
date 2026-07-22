@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from "react"
 import { motion } from "framer-motion"
-import { Clock, TrendingUp, Users, DollarSign } from "lucide-react"
+import { Clock, TrendingUp, Users } from "lucide-react"
 
 export function RoiCalculator() {
   const [dailyCustomers, setDailyCustomers] = useState(45)
@@ -9,7 +9,6 @@ export function RoiCalculator() {
 
   // Calculations
   const hoursSavedPerMonth = Math.round((dailyCustomers * 4 * 30) / 60)
-  const revenueBoostPercent = Math.min(35, Math.round(dailyCustomers * 0.4))
   const estimatedExtraOrders = Math.round(dailyCustomers * 0.18 * 30)
 
   return (

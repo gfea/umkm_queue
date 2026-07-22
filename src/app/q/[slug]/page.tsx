@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/Badge"
 import { motion, AnimatePresence } from "framer-motion"
 import { Store, AlertTriangle, ArrowRight, Users, ShieldCheck, Sparkles, Volume2, ShoppingBag, User } from "lucide-react"
 import { useRealtimeSync } from "@/lib/useRealtimeSync"
-import { playChime } from "@/utils/audio"
+import { playChime, haptic, enableNotifications, notifyQueue } from "@/utils/audio"
 
 function getTicketStorageKey(merchantId: string) {
   return `qlite_active_ticket_${merchantId}`
@@ -74,9 +74,16 @@ export default function QueuePage() {
     if (currentTicket) {
       const updated = findSameTicket(fresh, currentTicket)
       if (updated) {
-        // Trigger chime audio & haptic vibration if status changed to serving!
-        if (currentTicket.status !== "serving" && updated.status === "serving") {
-          playChime("ready")
+        if (currentTicket.status !== updated.status) {
+          if (updated.status === "serving") {
+            playChime("ready")
+            haptic("alert")
+            notifyQueue("Nomor antrean dipanggil", `${m.businessName}: nomor ${String(updated.number).padStart(3, "0")} sedang dilayani.`, `qlite-${updated.id}-serving`)
+          } else if (updated.status === "done") {
+            playChime("success")
+            haptic("success")
+            notifyQueue("Antrean selesai", `${m.businessName}: nomor ${String(updated.number).padStart(3, "0")} selesai.`, `qlite-${updated.id}-done`)
+          }
         }
         persistTicketId(m.id, updated.id)
         setTicket(updated)
@@ -172,6 +179,13 @@ export default function QueuePage() {
     setErr("")
     setLoading(true)
 
+    // Request notification permission on first user gesture
+    if (typeof window !== "undefined" && "Notification" in window) {
+      if (Notification.permission === "default") {
+        await enableNotifications()
+      }
+    }
+
     try {
       const newTicket = await store.joinAsync(merchant.id, name, note)
       setTicket(newTicket)
@@ -180,6 +194,9 @@ export default function QueuePage() {
         newTicket,
       ])
       persistTicketId(merchant.id, newTicket.id)
+      playChime("success")
+      haptic("success")
+      notifyQueue("Antrean berhasil diambil", `${merchant.businessName}: nomor Anda ${String(newTicket.number).padStart(3, "0")}.`, `qlite-${newTicket.id}-joined`)
     } catch (error) {
       setErr(error instanceof Error ? error.message : "Gagal masuk antrean")
     } finally {
