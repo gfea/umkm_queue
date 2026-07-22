@@ -12,6 +12,11 @@ const seed: Merchant[] = [
   { id: "demo-merchant", businessName: "Kopi Pagi", ownerName: "Budi Santoso", email: "admin@kopipagi.id", slug: "kopi-pagi", status: "active", createdAt: new Date().toISOString() },
 ]
 
+function uuid() {
+  if (typeof crypto !== "undefined" && crypto.randomUUID) return crypto.randomUUID()
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+}
+
 function read<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback
   const value = localStorage.getItem(key)
@@ -34,7 +39,7 @@ export const store = {
     write(MERCHANTS, items); return items
   },
   addMerchant(input: Omit<Merchant, "id" | "createdAt" | "status">) {
-    const item: Merchant = { ...input, id: crypto.randomUUID(), status: "active", createdAt: new Date().toISOString() }
+    const item: Merchant = { ...input, id: uuid(), status: "active", createdAt: new Date().toISOString() }
     const items = [...this.merchants(), item]; write(MERCHANTS, items); return item
   },
   join(merchantId: string, customerName: string) {
@@ -42,7 +47,7 @@ export const store = {
     if (!merchant || merchant.status === "suspended") throw new Error("Antrean UMKM sedang tidak tersedia")
     const current = this.tickets()
     const number = current.filter((item) => item.merchantId === merchantId).length + 1
-    const ticket: QueueTicket = { id: crypto.randomUUID(), merchantId, customerName: customerName.trim(), number, status: "waiting", createdAt: new Date().toISOString() }
+    const ticket: QueueTicket = { id: uuid(), merchantId, customerName: customerName.trim(), number, status: "waiting", createdAt: new Date().toISOString() }
     write(TICKETS, [...current, ticket]); return ticket
   },
 }
