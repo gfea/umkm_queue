@@ -1,88 +1,30 @@
-"use client"
-
-import React, { useState } from "react"
-import { Button } from "@/components/ui/Button"
-import { Card, CardHeader, CardContent } from "@/components/ui/Card"
-import { Input } from "@/components/ui/Input"
-import { Badge } from "@/components/ui/Badge"
-import { createQueueTicket } from "@/services/queueService"
-import { QueueItem } from "@/types"
+import Link from "next/link"
+import { ArrowRight, Clock3, QrCode, Store } from "lucide-react"
 
 export default function Home() {
-  const [name, setName] = useState("")
-  const [ticket, setTicket] = useState<QueueItem | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
-
-  const handleJoin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError("")
-    try {
-      // merchantId mockup untuk demo MVP
-      const res = await createQueueTicket({ merchantId: "demo-merchant", customerName: name })
-      setTicket(res)
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Gagal mengambil antrean"
-      setError(message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
   return (
-    <main className="min-h-screen bg-[#fafafa] flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-6">
-        <div className="text-center space-y-2">
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Q-Lite</h1>
-          <p className="text-sm text-slate-500">Antrean cepat & mudah untuk UMKM</p>
+    <main className="min-h-screen bg-[#f7f7f5] text-slate-950">
+      <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-6">
+        <span className="text-lg font-black tracking-tight">Q-Lite</span>
+        <Link href="/admin/login" className="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold hover:bg-slate-50">Masuk admin</Link>
+      </nav>
+      <section className="mx-auto grid max-w-6xl items-center gap-12 px-5 pb-20 pt-16 md:grid-cols-2 md:pt-28">
+        <div>
+          <p className="mb-5 text-xs font-bold uppercase tracking-[.25em] text-emerald-700">Antrean digital UMKM</p>
+          <h1 className="max-w-xl text-5xl font-black leading-[.98] tracking-[-.05em] md:text-7xl">Antrean rapi. Pelanggan tetap santai.</h1>
+          <p className="mt-7 max-w-lg text-lg leading-8 text-slate-600">Buat antrean toko dalam hitungan menit. Pelanggan cukup pindai QR, ambil nomor, lalu pantau giliran.</p>
+          <div className="mt-9 flex flex-wrap gap-3">
+            <Link href="/admin/login" className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-slate-950 px-6 font-bold text-white hover:bg-slate-800">Kelola UMKM <ArrowRight size={17}/></Link>
+            <Link href="/q/kopi-pagi" className="inline-flex min-h-12 items-center rounded-xl border border-slate-300 bg-white px-6 font-bold hover:bg-slate-50">Lihat demo</Link>
+          </div>
         </div>
-
-        {!ticket ? (
-          <Card>
-            <CardHeader>
-              <h2 className="text-lg font-semibold text-slate-800">Masuk Antrean</h2>
-              <p className="text-xs text-slate-400">Silakan masukkan nama panggilan Anda</p>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleJoin} className="space-y-4">
-                <Input
-                  type="text"
-                  placeholder="Contoh: Budi"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  disabled={loading}
-                />
-                {error && <p className="text-xs font-semibold text-red-500">{error}</p>}
-                <Button type="submit" className="w-full" isLoading={loading}>
-                  Ambil Nomor
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-        ) : (
-          <Card className="relative overflow-hidden">
-            <div className="absolute top-1/2 left-0 right-0 h-[1px] border-t border-dashed border-slate-200 -translate-y-1/2" />
-            <CardContent className="pt-6 pb-6 text-center space-y-8">
-              <div className="pb-6">
-                <span className="text-xs font-semibold tracking-widest text-slate-400 uppercase">Antrean Anda</span>
-                <div className="text-7xl font-bold font-mono tracking-tighter text-slate-900 mt-2">
-                  {ticket.ticketNumber}
-                </div>
-                <p className="text-sm font-medium text-slate-500 mt-2">Atas Nama: {ticket.customerName}</p>
-              </div>
-
-              <div className="pt-6 flex flex-col items-center gap-3">
-                <Badge variant={ticket.status}>{ticket.status === "waiting" ? "Menunggu" : "Diproses"}</Badge>
-                <p className="text-xs text-slate-400">Silakan pantau status di layar ini secara berkala</p>
-                <Button variant="secondary" className="w-full mt-4" onClick={() => setTicket(null)}>
-                  Keluar
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-      </div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {[ [QrCode,"QR siap pindai","Satu tautan unik untuk tiap UMKM."], [Clock3,"Nomor otomatis","Pelanggan masuk tanpa instal aplikasi."], [Store,"Multi-UMKM","Admin kelola seluruh toko dari satu panel."] ].map(([Icon,title,text], i) => {
+            const IconComponent = Icon as typeof QrCode
+            return <article key={String(title)} className={`rounded-3xl border border-slate-200 bg-white p-7 shadow-sm ${i === 2 ? "sm:col-span-2" : ""}`}><IconComponent size={25}/><h2 className="mt-8 text-lg font-bold">{String(title)}</h2><p className="mt-2 text-sm leading-6 text-slate-500">{String(text)}</p></article>
+          })}
+        </div>
+      </section>
     </main>
   )
 }
