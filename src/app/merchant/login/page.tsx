@@ -2,16 +2,13 @@
 
 import React, { useState } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { ArrowRight, KeyRound, Mail, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/Button"
 import { Card } from "@/components/ui/Card"
 import { Input } from "@/components/ui/Input"
 import { Logo } from "@/components/Logo"
-import { store } from "@/lib/store"
 
 export default function MerchantLoginPage() {
-  const router = useRouter()
   const [email, setEmail] = useState("")
   const [accessCode, setAccessCode] = useState("")
   const [error, setError] = useState("")
@@ -22,15 +19,26 @@ export default function MerchantLoginPage() {
     setError("")
     setLoading(true)
 
-    await store.fetchMerchantsAsync()
-    const merchant = store.merchantLogin(email, accessCode)
-    if (merchant) {
-      router.push("/merchant")
-      return
+    try {
+      const res = await fetch("/api/merchant/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, accessCode })
+      })
+      if (res.ok) {
+        const data = await res.json()
+        sessionStorage.setItem("qlite_merchant", data.merchantId)
+        sessionStorage.setItem("qlite_merchant_slug", data.slug)
+        window.location.href = "/merchant"
+      } else {
+        const data = await res.json()
+        setError(data.error || "Email atau kode akses salah, atau toko ditangguhkan.")
+        setLoading(false)
+      }
+    } catch {
+      setError("Terjadi kesalahan jaringan.")
+      setLoading(false)
     }
-
-    setError("Email atau kode akses salah, atau toko sedang ditangguhkan.")
-    setLoading(false)
   }
 
   function fillDemoCredentials() {

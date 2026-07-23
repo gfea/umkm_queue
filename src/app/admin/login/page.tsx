@@ -1,7 +1,5 @@
 "use client"
 import React, { useState } from "react"
-import { useRouter } from "next/navigation"
-import { store } from "@/lib/store"
 import { Logo } from "@/components/Logo"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
@@ -10,25 +8,34 @@ import { motion } from "framer-motion"
 import { Lock, Mail, ArrowRight } from "lucide-react"
 
 export default function AdminLogin() {
-  const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [err, setErr] = useState("")
   const [loading, setLoading] = useState(false)
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setErr("")
 
-    setTimeout(() => {
-      if (store.login(email, password)) {
-        router.push("/admin")
+    try {
+      const res = await fetch("/api/admin/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      })
+
+      if (res.ok) {
+        window.location.href = "/admin"
       } else {
-        setErr("Email atau password salah. Gunakan: admin@q-lite.gfea.my.id / admin123")
+        const data = await res.json()
+        setErr(data.error || "Gagal masuk")
         setLoading(false)
       }
-    }, 400)
+    } catch {
+      setErr("Terjadi kesalahan jaringan")
+      setLoading(false)
+    }
   }
 
   return (

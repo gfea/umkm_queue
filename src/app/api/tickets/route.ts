@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { broadcastTicketUpdate } from "@/lib/sse"
+import { readSession } from "@/lib/security"
 
 export const runtime = "nodejs"
 
@@ -62,6 +63,12 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ success: false, error: "Parameter tidak lengkap" }, { status: 400 })
     }
 
+    const merchantSession = await readSession(req, "merchant")
+    const adminSession = await readSession(req, "admin")
+    if ((!merchantSession || merchantSession.sub !== merchantId) && !adminSession) {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
+    }
+
     const tickets = db.updateTicketStatus(merchantId, ticketId, status)
 
     broadcastTicketUpdate(merchantId)
@@ -79,6 +86,13 @@ export async function DELETE(req: Request) {
     if (!merchantId) {
       return NextResponse.json({ success: false, error: "Merchant ID wajib diisi" }, { status: 400 })
     }
+
+    const merchantSession = await readSession(req, "merchant")
+    const adminSession = await readSession(req, "admin")
+    if ((!merchantSession || merchantSession.sub !== merchantId) && !adminSession) {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
+    }
+
     db.resetMerchantQueue(merchantId)
 
     broadcastTicketUpdate(merchantId)
