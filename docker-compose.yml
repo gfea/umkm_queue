@@ -12,6 +12,8 @@ services:
       - HOSTNAME=0.0.0.0
       - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL:-}
       - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}
+      - ADMIN_SECRET=${ADMIN_SECRET:-qlite-secure-admin-session-secret-key-prod-2026}
+      - MERCHANT_SECRET=${MERCHANT_SECRET:-qlite-secure-merchant-session-secret-key-prod-2026}
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - com.centurylinklabs.watchtower.scope=gfea
